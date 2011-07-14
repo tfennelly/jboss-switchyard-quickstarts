@@ -31,6 +31,7 @@ public class JavaDSLBuilder extends RouteBuilder {
             .log("${body}")
             .split(body(String.class).tokenize("\n"))
             .filter(body(String.class).startsWith("sally:"))
+            .to("bean:sallysFavoriteLogger")
             .to("switchyard://XMLService?operationName=acceptMessage");
     }
 }
