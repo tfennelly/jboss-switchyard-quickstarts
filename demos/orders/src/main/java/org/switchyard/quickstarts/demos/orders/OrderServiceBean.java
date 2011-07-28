@@ -20,7 +20,9 @@
 package org.switchyard.quickstarts.demos.orders;
 
 import javax.inject.Inject;
+import javax.security.auth.Subject;
 
+import org.switchyard.ExchangeContext;
 import org.switchyard.component.bean.Reference;
 import org.switchyard.component.bean.Service;
 
@@ -29,9 +31,17 @@ public class OrderServiceBean implements OrderService {
     
     @Inject @Reference
     private InventoryService _inventory;
+
+    private ExchangeContext _exchangeContext;
     
     @Override
     public OrderAck submitOrder(Order order) {
+        Subject secSubject = _exchangeContext.getSecuritySubject();
+
+        if (secSubject != null) {
+            System.out.println("Subject: " + secSubject);
+        }
+
         // Create an order ack
         OrderAck orderAck = new OrderAck().setOrderId(order.getOrderId());
         // Check the inventory
